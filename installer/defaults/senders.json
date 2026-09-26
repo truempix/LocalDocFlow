@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "_comment": "Bekannte Absender. Kann später durch eigene Regeln erweitert werden.",
+  "senders": []
+}

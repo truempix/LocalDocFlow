@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "_comment": "Fachliche Konfiguration für das Lernsystem. Ignorierte Pfade sind relativ zu LEARNING_ROOT aus system.conf. Der bevorzugte Lernbereich wird über CABINET_DIR in system.conf festgelegt.",
+
+  "ignored_roots": [
+    "Archiv/Rohscans",
+    "Scans/OCR"
+  ],
+
+  "ignored_names": [
+    ".nextcloudsync.log",
+    ".sync_"
+  ]
+}

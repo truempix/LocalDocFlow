@@ -1,0 +1,127 @@
+{
+  "version": 1,
+  "_comment": "Bekannte Dokumenttypen. Spezifische Typen stehen vor allgemeineren Typen.",
+
+  "document_types": [
+    {
+      "name": "Gehaltsabrechnung",
+      "patterns": [
+        "gehaltsabrechnung",
+        "entgeltabrechnung",
+        "lohnabrechnung",
+        "bezügeabrechnung",
+        "bezuegeabrechnung"
+      ]
+    },
+    {
+      "name": "Depotauszug",
+      "patterns": [
+        "depotauszug",
+        "depotübersicht",
+        "depotuebersicht"
+      ]
+    },
+    {
+      "name": "Kontoauszug",
+      "patterns": [
+        "kontoauszug"
+      ]
+    },
+    {
+      "name": "Steuerbescheid",
+      "patterns": [
+        "einkommensteuerbescheid",
+        "steuerbescheid"
+      ]
+    },
+    {
+      "name": "Beitragsbescheid",
+      "patterns": [
+        "beitragsbescheid"
+      ]
+    },
+    {
+      "name": "Versicherungsschein",
+      "patterns": [
+        "versicherungsschein",
+        "versicherungspolice"
+      ]
+    },
+    {
+      "name": "Arztbrief",
+      "patterns": [
+        "arztbrief",
+        "befundbericht",
+        "entlassungsbericht",
+        "arztbericht"
+      ]
+    },
+    {
+      "name": "Kündigungsbestätigung",
+      "patterns": [
+        "kündigungsbestätigung",
+        "kuendigungsbestaetigung",
+        "bestätigung ihrer kündigung",
+        "bestaetigung ihrer kuendigung"
+      ]
+    },
+    {
+      "name": "Mahnung",
+      "patterns": [
+        "zahlungserinnerung",
+        "\\bmahnung\\b",
+        "mahnschreiben"
+      ]
+    },
+    {
+      "name": "Gutschrift",
+      "patterns": [
+        "\\bgutschrift\\b",
+        "gutschriftsnummer"
+      ]
+    },
+    {
+      "name": "Quittung",
+      "patterns": [
+        "\\bquittung\\b",
+        "kassenbon",
+        "zahlungsbeleg"
+      ]
+    },
+    {
+      "name": "Lieferschein",
+      "patterns": [
+        "\\blieferschein\\b",
+        "lieferscheinnummer"
+      ]
+    },
+    {
+      "name": "Rechnung",
+      "patterns": [
+        "\\brechnung\\b",
+        "rechnungsnummer",
+        "rechnungsbetrag",
+        "rechnungsdatum"
+      ]
+    },
+    {
+      "name": "Abrechnung",
+      "patterns": [
+        "\\babrechnung\\b"
+      ]
+    },
+    {
+      "name": "Bescheid",
+      "patterns": [
+        "\\bbescheid\\b"
+      ]
+    },
+    {
+      "name": "Vertrag",
+      "patterns": [
+        "\\bvertrag\\b",
+        "vertragsnummer"
+      ]
+    }
+  ]
+}

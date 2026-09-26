@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Editor- und Sicherungsdateien
+*.bak
+*.bak.*
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+
+# Build- und Release-Artefakte
+build/
+dist/
+*.tar.gz
+*.zip
+
+# IDEs
+.idea/
+.vscode/

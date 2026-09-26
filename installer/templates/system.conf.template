@@ -1,0 +1,56 @@
+# ============================================================
+# LocalDocFlow - Systemkonfiguration
+# Diese Datei wird vom Installer erzeugt.
+# ============================================================
+
+# Zentrales Konfigurationsverzeichnis
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/localdocflow"
+
+
+# ------------------------------------------------------------
+# Dokumentablage
+# ------------------------------------------------------------
+
+DOCUMENT_ROOT="__DOCUMENT_ROOT__"
+
+RAW_DIR="${DOCUMENT_ROOT}/Archiv/Rohscans"
+OCR_DIR="${DOCUMENT_ROOT}/Scans/OCR"
+
+# Endgültige Dokumentablage
+CABINET_DIR="__CABINET_DIR__"
+
+
+# ------------------------------------------------------------
+# Scanner
+# ------------------------------------------------------------
+
+SCANNER_DEVICE="__SCANNER_DEVICE__"
+
+SCAN_RESOLUTION=300
+SCAN_PAGE_WIDTH=210
+SCAN_PAGE_HEIGHT=297
+
+
+# ------------------------------------------------------------
+# OCR
+# ------------------------------------------------------------
+
+OCR_LANGUAGES="deu+eng"
+
+
+# ------------------------------------------------------------
+# Lokale KI / Ollama
+# ------------------------------------------------------------
+
+OLLAMA_URL="http://127.0.0.1:11434"
+OLLAMA_MODEL="__OLLAMA_MODEL__"
+
+
+# ------------------------------------------------------------
+# Lernsystem
+# ------------------------------------------------------------
+
+LEARNING_ROOT="$DOCUMENT_ROOT"
+
+PENDING_LEARNING_FILE="${CONFIG_DIR}/pending_learning.json"
+LEARNING_RULES_FILE="${CONFIG_DIR}/learning.json"

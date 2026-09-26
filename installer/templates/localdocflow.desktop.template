@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Dokument scannen
+Comment=Dokument scannen und automatisch verarbeiten
+Exec=__INSTALL_DIR__/bin/scan_gui.py
+Icon=scanner
+Terminal=false
+Categories=Office;Utility;
+StartupNotify=true

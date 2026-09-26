@@ -1,0 +1,19 @@
+[Unit]
+Description=LocalDocFlow Rohscan Watcher
+After=default.target
+
+[Service]
+Type=simple
+
+ExecStart=__INSTALL_DIR__/bin/scan_watch.sh
+
+# Falls beim Login die SSD bzw. der Dokumentenpfad
+# noch nicht bereit ist, wird automatisch erneut versucht.
+Restart=always
+RestartSec=10
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

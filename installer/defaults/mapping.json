@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "_comment": "Ablageregeln relativ zu CABINET_DIR aus system.conf. Zielordner dürfen nur verwendet werden, wenn sie bereits existieren.",
+  "rules": []
+}

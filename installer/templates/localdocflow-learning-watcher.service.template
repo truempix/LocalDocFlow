@@ -1,0 +1,22 @@
+[Unit]
+Description=LocalDocFlow Learning Watcher
+After=default.target
+
+[Service]
+Type=simple
+
+# Echtes Lernen aktivieren
+Environment=LEARNING_DRY_RUN=false
+
+ExecStart=__INSTALL_DIR__/bin/scan_learning_watch.sh
+
+# Falls beim Login die SSD bzw. der Dokumentenpfad
+# noch nicht bereit ist, versucht systemd den Watcher erneut.
+Restart=on-failure
+RestartSec=10
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

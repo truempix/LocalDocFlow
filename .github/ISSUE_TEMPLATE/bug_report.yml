@@ -1,0 +1,41 @@
+name: Fehlerbericht
+description: Einen reproduzierbaren Fehler in LocalDocFlow melden
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Bitte entferne persönliche Daten, Dokumentinhalte, Zugangsdaten und unnötige Seriennummern aus Logs und Screenshots.
+  - type: input
+    id: version
+    attributes:
+      label: LocalDocFlow-Version
+      placeholder: "0.1.3"
+    validations:
+      required: true
+  - type: input
+    id: distro
+    attributes:
+      label: Linux-Distribution und Version
+      placeholder: "Ubuntu 26.04"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Fehlerbeschreibung
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Schritte zum Reproduzieren
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevante Logausgabe
+      description: Bitte vorher persönliche Daten entfernen.
+      render: shell
