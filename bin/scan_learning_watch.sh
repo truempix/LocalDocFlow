@@ -300,6 +300,7 @@ store_learning_rule() {
     local DOCUMENT_TYPE
     local CATEGORY
     local SUBCATEGORY
+    local INSURANCE_NUMBER
 
     local TMP_PENDING
     local TMP_LEARNING
@@ -363,6 +364,8 @@ store_learning_rule() {
             "$PENDING_FILE"
     )"
 
+    INSURANCE_NUMBER="$(jq -r --argjson INDEX "$INDEX" '.documents[$INDEX].insurance_number // ""' "$PENDING_FILE")"
+
 
     # --------------------------------------------------------
     # Lernregel hinzufügen
@@ -381,6 +384,7 @@ store_learning_rule() {
         --arg TYPE "$DOCUMENT_TYPE" \
         --arg CATEGORY "$CATEGORY" \
         --arg SUBCATEGORY "$SUBCATEGORY" \
+        --arg INSURANCE_NUMBER "$INSURANCE_NUMBER" \
         --arg TARGET "$TARGET_REL" \
         --arg PRIORITY "$PRIORITY" \
         --arg LEARNED "$LEARNED_AT" \
@@ -394,6 +398,7 @@ store_learning_rule() {
             document_type: $TYPE,
             category: $CATEGORY,
             subcategory: $SUBCATEGORY,
+            insurance_number: $INSURANCE_NUMBER,
             target: $TARGET,
             priority: $PRIORITY,
             learned_at: $LEARNED,

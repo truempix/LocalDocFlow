@@ -1144,6 +1144,8 @@ Aufgabe:
 3. Ermittle den konkreten Dokumenttyp.
 4. Ermittle eine grobe Kategorie.
 5. Ermittle eine sinnvolle Unterkategorie.
+6. Ermittle die Versicherungsnummer, falls sie ausdrücklich im Dokument steht.
+   Sonst verwende für insurance_number eine leere Zeichenfolge.
 
 Der Titel ist besonders wichtig, weil daraus der Dateiname erzeugt wird.
 
@@ -1217,7 +1219,7 @@ und den oberen Bereich des Dokuments."
                 messages: [
                     {
                         role: "system",
-                        content: "Analysiere das Dokument. Liefere die Felder sender, title, document_type, category, subcategory und confidence als gültiges JSON."
+                        content: "Analysiere das Dokument. Liefere die Felder sender, title, document_type, category, subcategory, insurance_number und confidence als gültiges JSON."
                     },
                     {
                         role: "user",
@@ -1623,6 +1625,7 @@ fi
 TITLE=""
 CATEGORY=""
 SUBCATEGORY=""
+INSURANCE_NUMBER=""
 
 AI_CONFIDENCE=""
 TITLE_CONFIDENCE=""
@@ -1679,6 +1682,20 @@ if ollama_available; then
                 '.subcategory // empty' \
                 <<< "$AI_RESULT"
         )"
+
+        AI_INSURANCE_NUMBER="$(
+            jq -r '.insurance_number // empty | strings' <<< "$AI_RESULT"
+        )"
+
+        # Nur eine im OCR-Text tatsächlich vorkommende Nummer übernehmen.
+        # Trennzeichen dürfen variieren; Ziffern und Buchstaben müssen gleich sein.
+        if [[ -n "$AI_INSURANCE_NUMBER" ]]; then
+            NUMBER_NORMALIZED="$(printf '%s' "$AI_INSURANCE_NUMBER" | tr -cd '[:alnum:]' | tr '[:lower:]' '[:upper:]')"
+            TEXT_NORMALIZED="$(tr -cd '[:alnum:]' < "$TEXT_FILE" | tr '[:lower:]' '[:upper:]')"
+            if (( ${#NUMBER_NORMALIZED} >= 7 )) && [[ "$TEXT_NORMALIZED" == *"$NUMBER_NORMALIZED"* ]]; then
+                INSURANCE_NUMBER="$AI_INSURANCE_NUMBER"
+            fi
+        fi
 
 
         AI_CONFIDENCE="$(
@@ -1837,6 +1854,22 @@ fi
 
 PROPOSED_FILENAME=""
 
+# Versicherungsnummer nur dann in den Dateinamen aufnehmen,
+# wenn sie zuvor sicher im Dokument erkannt wurde.
+INSURANCE_FILENAME_PART=""
+
+if [[ -n "$INSURANCE_NUMBER" ]]; then
+
+    SAFE_INSURANCE_NUMBER="$(
+        sanitize_filename_part "$INSURANCE_NUMBER"
+    )"
+
+    if [[ -n "$SAFE_INSURANCE_NUMBER" ]]; then
+        INSURANCE_FILENAME_PART="_${SAFE_INSURANCE_NUMBER}"
+    fi
+
+fi
+
 
 if [[ -n "$TITLE" \
    && "$SENDER" != "Unbekannt" ]]
@@ -1850,7 +1883,7 @@ then
         sanitize_filename_part "$TITLE"
     )"
 
-    PROPOSED_FILENAME="${DOCUMENT_DATE}_${SAFE_SENDER}_${SAFE_TITLE}.pdf"
+    PROPOSED_FILENAME="${DOCUMENT_DATE}_${SAFE_SENDER}${INSURANCE_FILENAME_PART}_${SAFE_TITLE}.pdf"
 
 
 elif [[ -n "$TITLE" ]]; then
@@ -1859,7 +1892,7 @@ elif [[ -n "$TITLE" ]]; then
         sanitize_filename_part "$TITLE"
     )"
 
-    PROPOSED_FILENAME="${DOCUMENT_DATE}_${SAFE_TITLE}.pdf"
+    PROPOSED_FILENAME="${DOCUMENT_DATE}${INSURANCE_FILENAME_PART}_${SAFE_TITLE}.pdf"
 
 
 elif [[ "$SENDER" != "Unbekannt" ]]; then
@@ -1868,7 +1901,7 @@ elif [[ "$SENDER" != "Unbekannt" ]]; then
         sanitize_filename_part "$SENDER"
     )"
 
-    PROPOSED_FILENAME="${DOCUMENT_DATE}_${SAFE_SENDER}_Unklar.pdf"
+    PROPOSED_FILENAME="${DOCUMENT_DATE}_${SAFE_SENDER}${INSURANCE_FILENAME_PART}_Unklar.pdf"
 
 fi
 
@@ -1973,6 +2006,10 @@ learning_exact_match() {
        && "$CURRENT_NORMALIZED" == "$LEARNED_NORMALIZED" ]]
 }
 
+normalize_insurance_number() {
+    printf '%s' "$1" | tr -cd '[:alnum:]' | tr '[:lower:]' '[:upper:]'
+}
+
 
 # ============================================================
 # Titelähnlichkeit
@@ -2068,6 +2105,7 @@ detect_learned_target() {
     local RULE_TYPE
     local RULE_CATEGORY
     local RULE_SUBCATEGORY
+    local RULE_INSURANCE_NUMBER
     local RULE_TARGET
     local RULE_PRIORITY
 
@@ -2125,6 +2163,19 @@ detect_learned_target() {
                 '.subcategory // ""' \
                 <<< "$RULE"
         )"
+
+        RULE_INSURANCE_NUMBER="$(jq -r '.insurance_number // ""' <<< "$RULE")"
+
+        # Bei Versicherungen ist ein allgemeiner Treffer keine sichere
+        # Vertragszuordnung. Auch ältere Regeln ohne Nummer bleiben inaktiv.
+        if [[ "${CATEGORY,,}" == versicherung || "${RULE_CATEGORY,,}" == versicherung ]]; then
+            CURRENT_NUMBER="$(normalize_insurance_number "$INSURANCE_NUMBER")"
+            RULE_NUMBER="$(normalize_insurance_number "$RULE_INSURANCE_NUMBER")"
+            if (( ${#CURRENT_NUMBER} < 7 || ${#RULE_NUMBER} < 7 )) \
+                || [[ "$CURRENT_NUMBER" != "$RULE_NUMBER" ]]; then
+                continue
+            fi
+        fi
 
 
         RULE_TARGET="$(
@@ -2770,6 +2821,7 @@ jq \
     --arg TYPE "$DOCUMENT_TYPE" \
     --arg CATEGORY "$CATEGORY" \
     --arg SUBCATEGORY "$SUBCATEGORY" \
+    --arg INSURANCE_NUMBER "$INSURANCE_NUMBER" \
     --arg CONFIDENCE "${AI_CONFIDENCE:-}" \
     --arg TITLE_CONFIDENCE "${TITLE_CONFIDENCE:-}" \
     --arg MAPPING "$TARGET_RULE" \
@@ -2788,6 +2840,7 @@ jq \
         document_type: $TYPE,
         category: $CATEGORY,
         subcategory: $SUBCATEGORY,
+        insurance_number: $INSURANCE_NUMBER,
         confidence: $CONFIDENCE,
         title_confidence: $TITLE_CONFIDENCE,
         initial_mapping: $MAPPING,
