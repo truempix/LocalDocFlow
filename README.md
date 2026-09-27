@@ -22,7 +22,8 @@ Die Rohscans bleiben dauerhaft erhalten. Zusätzlich erzeugt LocalDocFlow eine d
 - Erkennung des Dokumentdatums
 - lokale Dokumentanalyse mit Ollama
 - Erkennung bzw. Ableitung von Titel/Betreff, Dokumenttyp, Kategorie und Unterkategorie
-- aussagekräftige Dateinamen
+- Erkennung ausdrücklich im Dokument enthaltener Versicherungsnummern
+- aussagekräftige Dateinamen, bei Versicherungen optional mit erkannter Versicherungsnummer
 - regelbasierte automatische Ablage
 - sichere OCR-Zwischenablage, wenn noch keine passende Regel existiert
 - lernfähige Ablageregeln
@@ -43,6 +44,8 @@ Dokumentinhalte müssen für die Analyse nicht an einen externen Cloud-KI-Dienst
 Kann ein Dokument noch nicht sicher automatisch abgelegt werden, verbleibt es zunächst in der OCR-Zwischenablage.
 
 Wird dieses Dokument anschließend manuell in den gewünschten fachlichen Ordner verschoben, erkennt der Learning-Watcher diese Korrektur. Daraus kann eine Ablageregel entstehen, die bei späteren ähnlichen Dokumenten automatisch angewendet wird.
+
+Bei Versicherungsdokumenten kann eine erkannte Versicherungsnummer zusätzlich als Vertragsmerkmal verwendet werden. Gelernte Versicherungsregeln werden nur automatisch angewendet, wenn die normalisierten Versicherungsnummern übereinstimmen. Ältere Versicherungsregeln ohne gespeicherte Nummer werden dadurch nicht für eine automatische Vertragszuordnung verwendet.
 
 LocalDocFlow erstellt keine fachliche Ordnerstruktur eigenmächtig. Die gewünschten Zielordner werden vom Benutzer vorgegeben.
 
@@ -133,8 +136,6 @@ Für eine öffentliche Veröffentlichung ist dieses Projekt so vorbereitet, dass
 
 Vor jedem öffentlichen Push sollte der Privacy-Check aus `RELEASE.md` ausgeführt werden.
 
-## Bekannter Fehler
+## Ollama-Reparatur
 
-Bei einer unvollständigen Ollama-Installation kann `ollama` bereits vorhanden sein,
-während die systemd-Unit `ollama.service` fehlt. Der Installer erkennt diesen
-Zustand derzeit, repariert ihn aber noch nicht automatisch.
+Der Installer erkennt unvollständige Ollama-Installationen, bei denen das Programm bereits vorhanden ist, der systemd-Dienst jedoch fehlt oder beschädigt beziehungsweise maskiert ist. In diesem Fall kann die Ollama-Installation nach Bestätigung erneut ausgeführt und der Dienst wiederhergestellt werden.

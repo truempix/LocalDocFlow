@@ -17,9 +17,12 @@ Alle wichtigen Änderungen an LocalDocFlow werden in dieser Datei dokumentiert.
 - Default-Konfigurationen für Veröffentlichung neutralisiert.
 - persönliche Ablagestrukturen aus dem Installer entfernt.
 - endgültige Dokumentenablage über `CABINET_DIR` frei konfigurierbar.
+- ausdrücklich im Dokument enthaltene Versicherungsnummern können erkannt und nach Prüfung gegen den Dokumenttext in den Dateinamen übernommen werden.
+- Versicherungsnummern werden im Lernsystem gespeichert und bei Versicherungsdokumenten als zusätzliches Vertragsmerkmal für gelernte Ablageregeln verwendet.
 
 ### Behoben
 
+- unvollständige Ollama-Installationen mit fehlender, maskierter oder beschädigter `ollama.service` können vom Installer erkannt und repariert werden.
 - GUI sucht Hilfsskripte relativ zu ihrem eigenen Installationsverzeichnis.
 - Systemstatus und Protokoll funktionieren auch nach Installation unter `~/.local/share/...`.
 - bestehende Scannerkonfiguration wird nicht mehr versehentlich geleert, wenn der Scanner während eines erneuten Installerlaufs ausgeschaltet ist.
@@ -40,6 +43,8 @@ Alle wichtigen Änderungen an LocalDocFlow werden in dieser Datei dokumentiert.
 - manuelle Ablagekorrektur.
 - Erzeugung einer Lernregel.
 - automatische Ablage eines späteren ähnlichen Dokuments über die Lernregel.
+- Reparatur einer beschädigten beziehungsweise maskierten Ollama-systemd-Unit.
+- erneuter Installerlauf nach erfolgreicher Ollama-Reparatur.
 
 ## [0.1.2] - Entwicklungsstand
 
