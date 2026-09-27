@@ -45,23 +45,45 @@ check_ollama_installed() {
 
 
 # ------------------------------------------------------------
-# Ollama installieren
+# Prüfen, ob eine systemd-Unit für Ollama vorhanden ist
 # ------------------------------------------------------------
 
-install_ollama() {
+ollama_service_exists() {
+
+    command -v systemctl >/dev/null 2>&1 || return 1
+
+    systemctl list-unit-files \
+        ollama.service \
+        --no-legend \
+        2>/dev/null |
+        grep -q '^ollama\.service'
+}
+
+
+# ------------------------------------------------------------
+# Prüfen, ob die Ollama-API bereits erreichbar ist
+# ------------------------------------------------------------
+
+ollama_api_reachable() {
+
+    local ollama_url
+
+    ollama_url="$(get_configured_ollama_url)"
+
+    curl \
+        -fsS \
+        "${ollama_url}/api/version" \
+        >/dev/null 2>&1
+}
+
+
+# ------------------------------------------------------------
+# Offiziellen Ollama-Installer ausführen
+# ------------------------------------------------------------
+
+run_official_ollama_installer() {
+
     local installer_file
-
-    if check_ollama_installed; then
-        ok "Ollama ist bereits installiert."
-        return 0
-    fi
-
-    warn "Ollama ist noch nicht installiert."
-
-    if ! ask_yes_no "Ollama jetzt installieren?"; then
-        error "Ollama wird für die lokale KI-Verarbeitung benötigt."
-        return 1
-    fi
 
     if ! command -v curl >/dev/null 2>&1; then
         error "curl fehlt. Ollama kann nicht heruntergeladen werden."
@@ -79,29 +101,64 @@ install_ollama() {
         https://ollama.com/install.sh \
         -o "$installer_file"
     then
+
         rm -f "$installer_file"
+
         error "Ollama-Installer konnte nicht heruntergeladen werden."
         return 1
     fi
 
     chmod 700 "$installer_file"
 
-    info "Starte Ollama-Installation ..."
+    info "Starte offiziellen Ollama-Installer ..."
 
     if ! sh "$installer_file"; then
+
         rm -f "$installer_file"
+
         error "Ollama-Installation fehlgeschlagen."
         return 1
     fi
 
     rm -f "$installer_file"
 
+    return 0
+}
+
+
+# ------------------------------------------------------------
+# Ollama installieren
+# ------------------------------------------------------------
+
+install_ollama() {
+
+    if check_ollama_installed; then
+
+        ok "Ollama ist bereits installiert."
+        return 0
+    fi
+
+    warn "Ollama ist noch nicht installiert."
+
+    if ! ask_yes_no "Ollama jetzt installieren?"; then
+
+        error "Ollama wird für die lokale KI-Verarbeitung benötigt."
+        return 1
+    fi
+
+    if ! run_official_ollama_installer; then
+        return 1
+    fi
+
     if ! check_ollama_installed; then
+
         error "Ollama wurde nach der Installation nicht gefunden."
         return 1
     fi
 
     ok "Ollama wurde installiert."
+
+    return 0
 }
 
 
@@ -110,44 +167,275 @@ install_ollama() {
 # ------------------------------------------------------------
 
 activate_ollama_service() {
+
+    local enabled_state=""
+    local system_unit="/etc/systemd/system/ollama.service"
+    local broken_mask=false
+
+
     if ! command -v systemctl >/dev/null 2>&1; then
+
         error "systemctl fehlt. Ollama-Dienst kann nicht verwaltet werden."
         return 1
     fi
 
-    if ! systemctl list-unit-files \
-        ollama.service \
-        --no-legend \
-        2>/dev/null |
-        grep -q '^ollama.service'
-    then
-        warn "Keine ollama.service Unit gefunden."
-        warn "Prüfe, ob Ollama bereits anderweitig läuft."
-        return 0
+
+    # --------------------------------------------------------
+    # Status der Unit prüfen
+    # --------------------------------------------------------
+
+    enabled_state="$(
+        systemctl is-enabled \
+            ollama.service \
+            2>/dev/null \
+            || true
+    )"
+
+
+    # --------------------------------------------------------
+    # Maskierte oder beschädigte Unit erkennen
+    #
+    # systemd behandelt unter anderem folgende Zustände als
+    # maskiert:
+    #
+    #   /etc/systemd/system/ollama.service -> /dev/null
+    #
+    # oder eine leere Unit-Datei.
+    #
+    # Letzteres kann beispielsweise nach einer abgebrochenen
+    # Installation zurückbleiben.
+    # --------------------------------------------------------
+
+    if [[ "$enabled_state" == "masked" ]]; then
+        broken_mask=true
     fi
 
-    # Bereits vollständig eingerichtet
+
+    if [[ -L "$system_unit" ]]; then
+
+        if [[ "$(readlink -f "$system_unit" 2>/dev/null)" == "/dev/null" ]]; then
+            broken_mask=true
+        fi
+
+    elif [[ -f "$system_unit" && ! -s "$system_unit" ]]; then
+
+        broken_mask=true
+    fi
+
+
+    # --------------------------------------------------------
+    # Maskierte / leere Unit reparieren
+    # --------------------------------------------------------
+
+    if [[ "$broken_mask" == true ]]; then
+
+        warn "ollama.service ist maskiert oder beschädigt."
+
+        if [[ -f "$system_unit" && ! -s "$system_unit" ]]; then
+
+            warn "Leere systemd-Unit gefunden:"
+            warn "  $system_unit"
+
+        elif [[ -L "$system_unit" ]]; then
+
+            warn "Maskierende systemd-Verknüpfung gefunden:"
+            warn "  $system_unit"
+
+        fi
+
+
+        if ! ask_yes_no \
+            "Beschädigte Ollama-Service-Konfiguration reparieren?"
+        then
+
+            error "Ollama-Dienst wurde nicht repariert."
+            return 1
+        fi
+
+
+        # Nur eindeutig defekte bzw. maskierende Dateien
+        # automatisch entfernen.
+        #
+        # Eine normale, nicht leere Unit-Datei wird hier niemals
+        # ungefragt gelöscht.
+
+        if [[ -f "$system_unit" && ! -s "$system_unit" ]]; then
+
+            info "Entferne leere Ollama-Service-Datei ..."
+
+            if ! sudo rm -f "$system_unit"; then
+
+                error "Leere Ollama-Service-Datei konnte nicht entfernt werden."
+                return 1
+            fi
+
+        elif [[ -L "$system_unit" ]] \
+          && [[ "$(readlink -f "$system_unit" 2>/dev/null)" == "/dev/null" ]]
+        then
+
+            info "Entferne Maskierung des Ollama-Dienstes ..."
+
+            if ! sudo rm -f "$system_unit"; then
+
+                error "Maskierung konnte nicht entfernt werden."
+                return 1
+            fi
+
+        else
+
+            info "Versuche Ollama-Dienst zu entmaskieren ..."
+
+            sudo systemctl unmask \
+                ollama.service \
+                >/dev/null 2>&1 \
+                || true
+        fi
+
+
+        if ! sudo systemctl daemon-reload; then
+
+            error "systemd-Konfiguration konnte nicht neu geladen werden."
+            return 1
+        fi
+
+
+        info "Installiere Ollama-Service erneut ..."
+
+        if ! run_official_ollama_installer; then
+
+            error "Reparatur der Ollama-Installation fehlgeschlagen."
+            return 1
+        fi
+
+
+        if ! sudo systemctl daemon-reload; then
+
+            error "systemd-Konfiguration konnte nach der Reparatur nicht neu geladen werden."
+            return 1
+        fi
+
+
+        enabled_state="$(
+            systemctl is-enabled \
+                ollama.service \
+                2>/dev/null \
+                || true
+        )"
+
+
+        if [[ "$enabled_state" == "masked" ]]; then
+
+            error "ollama.service ist nach der Reparatur weiterhin maskiert."
+            return 1
+        fi
+
+
+        if ! ollama_service_exists; then
+
+            error "Nach der Reparatur wurde keine gültige ollama.service Unit gefunden."
+            return 1
+        fi
+
+
+        ok "Beschädigte Ollama-Service-Konfiguration wurde repariert."
+    fi
+
+
+    # --------------------------------------------------------
+    # Binary vorhanden, aber Service vollständig verschwunden
+    # --------------------------------------------------------
+
+    if ! ollama_service_exists; then
+
+        warn "Ollama ist installiert, aber ollama.service fehlt."
+
+        if ollama_api_reachable; then
+
+            warn "Die Ollama-API läuft momentan trotzdem."
+            warn "Für einen zuverlässigen Systemstart sollte der Dienst repariert werden."
+
+        else
+
+            warn "Die Ollama-API ist ebenfalls nicht erreichbar."
+            warn "Die Ollama-Installation ist wahrscheinlich unvollständig."
+
+        fi
+
+
+        if ! ask_yes_no \
+            "Ollama-Installation mit dem offiziellen Installer reparieren?"
+        then
+
+            error "Ollama-Dienst wurde nicht repariert."
+            return 1
+        fi
+
+
+        info "Versuche Ollama-Installation zu reparieren ..."
+
+        if ! run_official_ollama_installer; then
+
+            error "Reparatur der Ollama-Installation fehlgeschlagen."
+            return 1
+        fi
+
+
+        info "Lade systemd-Konfiguration neu ..."
+
+        if ! sudo systemctl daemon-reload; then
+
+            error "systemd-Konfiguration konnte nicht neu geladen werden."
+            return 1
+        fi
+
+
+        if ! ollama_service_exists; then
+
+            error "Nach der Reparatur wurde weiterhin keine ollama.service Unit gefunden."
+            return 1
+        fi
+
+
+        ok "ollama.service wurde wiederhergestellt."
+    fi
+
+
+    # --------------------------------------------------------
+    # Vollständig eingerichteter Dienst
+    # --------------------------------------------------------
+
     if systemctl is-enabled \
             ollama.service >/dev/null 2>&1 &&
        systemctl is-active \
             ollama.service >/dev/null 2>&1
     then
+
         ok "Ollama-Dienst ist bereits aktiviert und läuft."
         return 0
     fi
 
+
     info "Aktiviere und starte Ollama-Dienst ..."
 
-    sudo systemctl enable --now ollama.service
+    if ! sudo systemctl enable --now ollama.service; then
+
+        error "Ollama-Dienst konnte nicht aktiviert oder gestartet werden."
+        return 1
+    fi
+
 
     if systemctl is-active \
         ollama.service >/dev/null 2>&1
     then
+
         ok "Ollama-Dienst ist aktiviert und läuft."
-    else
-        error "Ollama-Dienst konnte nicht gestartet werden."
-        return 1
+        return 0
     fi
+
+
+    error "Ollama-Dienst konnte nicht gestartet werden."
+
+    return 1
 }
 
 
@@ -302,10 +590,10 @@ prepare_ollama() {
 
      check_ollama_memory "$model" || return 1
 
-    install_ollama
-    activate_ollama_service
-    wait_for_ollama
-    install_ollama_model "$model"
+    install_ollama || return 1
+    activate_ollama_service || return 1
+    wait_for_ollama || return 1
+    install_ollama_model "$model" || return 1
 
     printf '\n'
     ok "Lokale KI ist einsatzbereit."
