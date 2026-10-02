@@ -27,6 +27,7 @@ set -Eeuo pipefail
 
 # ------------------------------------------------------------
 # Pfade des Installers
+# Installer paths
 # ------------------------------------------------------------
 
 SCRIPT_DIR="$(
@@ -45,6 +46,7 @@ DEFAULT_DIR="${SCRIPT_DIR}/defaults"
 
 # ------------------------------------------------------------
 # Globale Variablen
+# Global variables
 # ------------------------------------------------------------
 
 OS_ID=""
@@ -61,6 +63,7 @@ declare -a MISSING_PACKAGES=()
 
 # ------------------------------------------------------------
 # Ausgabe
+# Output
 # ------------------------------------------------------------
 
 info() {
@@ -82,6 +85,7 @@ error() {
 
 # ------------------------------------------------------------
 # Betriebssystem erkennen
+# Detect operating system
 # ------------------------------------------------------------
 
 detect_os() {
@@ -103,6 +107,7 @@ detect_os() {
 
 # ------------------------------------------------------------
 # Paketmanager erkennen
+# Detect package manager
 # ------------------------------------------------------------
 
 detect_package_manager() {
@@ -131,6 +136,7 @@ detect_package_manager() {
 
 # ------------------------------------------------------------
 # Benutzerumgebung prüfen
+# Validate user environment
 # ------------------------------------------------------------
 
 check_user_environment() {
@@ -161,6 +167,7 @@ check_user_environment() {
 
 # ------------------------------------------------------------
 # Desktop-Umgebung erkennen
+# Detect desktop environment
 # ------------------------------------------------------------
 
 detect_desktop() {
@@ -174,6 +181,7 @@ detect_desktop() {
 
 # ------------------------------------------------------------
 # Projektstruktur prüfen
+# Validate project structure
 # ------------------------------------------------------------
 
 check_installer_files() {
@@ -220,6 +228,7 @@ check_installer_files() {
 
 # ------------------------------------------------------------
 # Bereits vorhandene Programme anzeigen
+# Show already installed programs
 # ------------------------------------------------------------
 
 check_existing_components() {
@@ -252,6 +261,7 @@ check_existing_components() {
 
 # ------------------------------------------------------------
 # Hilfsfunktion für Paketliste
+# Helper for package list
 # ------------------------------------------------------------
 
 add_package() {
@@ -265,6 +275,7 @@ add_package() {
 
 # ------------------------------------------------------------
 # Fehlende Abhängigkeiten ermitteln
+# Determine missing dependencies
 # ------------------------------------------------------------
 
 collect_missing_dependencies() {
@@ -459,6 +470,7 @@ collect_missing_dependencies() {
 
 # ------------------------------------------------------------
 # Fehlende Pakete anzeigen
+# Show missing packages
 # ------------------------------------------------------------
 
 show_missing_dependencies() {
@@ -506,6 +518,7 @@ show_missing_dependencies() {
 
 # ------------------------------------------------------------
 # Ja/Nein-Rückfrage
+# Yes/no prompt
 # ------------------------------------------------------------
 
 ask_yes_no() {
@@ -534,6 +547,7 @@ ask_yes_no() {
 
 # ------------------------------------------------------------
 # Fehlende Pakete installieren
+# Install missing packages
 # ------------------------------------------------------------
 
 install_missing_dependencies() {
@@ -588,6 +602,7 @@ install_missing_dependencies() {
 
 # ------------------------------------------------------------
 # Abhängigkeiten nach Installation erneut prüfen
+# Re-check dependencies after installation
 # ------------------------------------------------------------
 
 verify_dependencies() {
@@ -612,6 +627,7 @@ verify_dependencies() {
 
 # ------------------------------------------------------------
 # Hauptprogramm
+# Main program
 # ------------------------------------------------------------
 
 main() {

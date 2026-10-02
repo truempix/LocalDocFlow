@@ -3,6 +3,7 @@ set -euo pipefail
 
 # ============================================================
 # LocalDocFlow - Rohscan Watcher
+# LocalDocFlow - Raw-scan watcher
 #
 # Überwacht:
 #
@@ -14,15 +15,21 @@ set -euo pipefail
 # Die Verarbeitung erfolgt bewusst nacheinander.
 # Dadurch laufen nicht mehrere OCR-/Ollama-Prozesse
 # gleichzeitig auf dem Rechner.
+#
+# English summary:
+#   Processing is deliberately serialized so multiple OCR/Ollama workloads
+#   do not run in parallel on the same machine.
 # ============================================================
 
 
 # ============================================================
 # Konfiguration
+# Configuration
 # ============================================================
 
 # ============================================================
 # Zentrale Systemkonfiguration
+# Central system configuration
 # ============================================================
 
 CONFIG_DIR="$HOME/.config/localdocflow"
@@ -43,6 +50,7 @@ source "$SYSTEM_CONFIG"
 
 # ------------------------------------------------------------
 # Benötigte Werte prüfen
+# Validate required values
 # ------------------------------------------------------------
 
 : "${RAW_DIR:?RAW_DIR fehlt in system.conf}"
@@ -50,6 +58,7 @@ source "$SYSTEM_CONFIG"
 
 # ------------------------------------------------------------
 # Interne Pfade
+# Internal paths
 # ------------------------------------------------------------
 
 RAW_ROOT="$RAW_DIR"
@@ -65,6 +74,7 @@ PROCESSOR="${SCRIPT_DIR}/scan_process.sh"
 
 # ============================================================
 # Programme prüfen
+# Check required programs
 # ============================================================
 
 for CMD in \
@@ -86,6 +96,7 @@ done
 
 # ============================================================
 # Verzeichnisse / Dateien prüfen
+# Validate directories / files
 # ============================================================
 
 if [[ ! -d "$RAW_ROOT" ]]; then
@@ -235,6 +246,7 @@ wait_until_ready() {
 
 # ============================================================
 # Einzelnen Rohscan verarbeiten
+# Process a single raw scan
 # ============================================================
 
 handle_pdf() {
@@ -403,6 +415,7 @@ echo
 
 # ============================================================
 # Verzeichnis rekursiv überwachen
+# Watch directory recursively
 #
 # close_write:
 #   Datei wurde direkt im Zielverzeichnis geschrieben.

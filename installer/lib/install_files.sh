@@ -9,6 +9,7 @@
 
 # ------------------------------------------------------------
 # Installationspfade bestimmen
+# Determine installation paths
 # ------------------------------------------------------------
 
 determine_install_paths() {
@@ -24,6 +25,7 @@ determine_install_paths() {
 
 # ------------------------------------------------------------
 # Programmdateien installieren
+# Install program files
 # ------------------------------------------------------------
 
 install_program_files() {
@@ -66,6 +68,7 @@ install_program_files() {
 
 # ------------------------------------------------------------
 # Template mit Installationspfad erzeugen
+# Render template with installation path
 # ------------------------------------------------------------
 
 render_install_template() {
@@ -99,6 +102,7 @@ PY
 
 # ------------------------------------------------------------
 # Vorhandene Integrationsdatei sichern
+# Back up existing integration file
 # ------------------------------------------------------------
 
 backup_existing_file() {
@@ -119,6 +123,7 @@ backup_existing_file() {
 
 # ------------------------------------------------------------
 # systemd-Userdienste erzeugen
+# Create systemd user services
 # ------------------------------------------------------------
 
 install_systemd_units() {
@@ -147,6 +152,7 @@ install_systemd_units() {
 
 # ------------------------------------------------------------
 # systemd-Userdienste aktivieren und starten
+# Enable and start systemd user services
 # ------------------------------------------------------------
 
 activate_systemd_units() {
@@ -177,6 +183,7 @@ activate_systemd_units() {
 
 # ------------------------------------------------------------
 # systemd-Userdienste prüfen
+# Check systemd user services
 # ------------------------------------------------------------
 
 verify_systemd_units() {
@@ -217,6 +224,7 @@ verify_systemd_units() {
 
 # ------------------------------------------------------------
 # Desktop-Starter erzeugen
+# Create desktop launcher
 # ------------------------------------------------------------
 
 install_desktop_launcher() {
@@ -244,6 +252,7 @@ install_desktop_launcher() {
 
 # ------------------------------------------------------------
 # Installierte Dateien prüfen
+# Validate installed files
 # ------------------------------------------------------------
 
 verify_installed_files() {
@@ -279,6 +288,7 @@ verify_installed_files() {
 
 # ------------------------------------------------------------
 # Abschließende Installationsprüfung
+# Final installation check
 # ------------------------------------------------------------
 
 final_installation_check() {
@@ -293,6 +303,7 @@ final_installation_check() {
     printf '\n'
 
     # Zentrale Systemkonfiguration
+    # Central system configuration
     if [[ -f "${config_dir}/system.conf" ]]; then
         ok "system.conf vorhanden"
     else
@@ -325,6 +336,7 @@ final_installation_check() {
     fi
 
     # Dienste
+    # Services
     if ! verify_systemd_units; then
         failed=1
     fi

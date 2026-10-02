@@ -9,6 +9,7 @@
 
 # ------------------------------------------------------------
 # Vorhandenen DOCUMENT_ROOT als Vorschlag ermitteln
+# Determine existing DOCUMENT_ROOT as suggestion
 # ------------------------------------------------------------
 
 get_default_document_root() {
@@ -46,6 +47,7 @@ get_default_document_root() {
 
 # ------------------------------------------------------------
 # Dokumentwurzel abfragen
+# Ask for document root
 # ------------------------------------------------------------
 
 select_document_root() {
@@ -93,6 +95,7 @@ select_document_root() {
 
 # ------------------------------------------------------------
 # Vorhandenen Ablageordner als Vorschlag ermitteln
+# Determine existing filing directory as suggestion
 # ------------------------------------------------------------
 
 get_default_cabinet_dir() {
@@ -121,6 +124,7 @@ get_default_cabinet_dir() {
 
 # ------------------------------------------------------------
 # Endgültigen Ablageordner auswählen
+# Select final filing directory
 # ------------------------------------------------------------
 
 select_cabinet_dir() {
@@ -164,6 +168,7 @@ select_cabinet_dir() {
 
 # ------------------------------------------------------------
 # Technische Dokumentstruktur vorbereiten
+# Prepare technical document structure
 # ------------------------------------------------------------
 
 prepare_document_structure() {
@@ -212,6 +217,7 @@ prepare_document_structure() {
 
 # ------------------------------------------------------------
 # Scanner suchen
+# Detect scanners
 # ------------------------------------------------------------
 
 detect_scanners() {
@@ -236,6 +242,7 @@ detect_scanners() {
 
 # ------------------------------------------------------------
 # Bereits konfigurierten Scanner ermitteln
+# Determine previously configured scanner
 # ------------------------------------------------------------
 
 get_existing_scanner_device() {
@@ -262,6 +269,7 @@ get_existing_scanner_device() {
 
 # ------------------------------------------------------------
 # Scanner auswählen
+# Select scanner
 # ------------------------------------------------------------
 
 select_scanner() {
@@ -358,6 +366,7 @@ select_scanner() {
 
 # ------------------------------------------------------------
 # Ollama-Modell auswählen
+# Select Ollama model
 # ------------------------------------------------------------
 
 select_ollama_model() {
@@ -379,6 +388,7 @@ select_ollama_model() {
 
 # ------------------------------------------------------------
 # Vorschau für system.conf erzeugen
+# Create system.conf preview
 # ------------------------------------------------------------
 
 create_system_config_preview() {
@@ -412,6 +422,7 @@ create_system_config_preview() {
 
 # ------------------------------------------------------------
 # Konfiguration anzeigen
+# Show configuration
 # ------------------------------------------------------------
 
 show_system_config_preview() {
@@ -429,6 +440,7 @@ show_system_config_preview() {
 
 # ------------------------------------------------------------
 # system.conf schreiben
+# Write system.conf
 # ------------------------------------------------------------
 
 write_system_config() {
@@ -462,6 +474,7 @@ write_system_config() {
 
 # ------------------------------------------------------------
 # Laufzeitdateien einer Neuinstallation vorbereiten
+# Prepare runtime files for a fresh installation
 # ------------------------------------------------------------
 
 initialize_runtime_config() {
@@ -495,6 +508,7 @@ initialize_runtime_config() {
 }
 # ------------------------------------------------------------
 # Gesamte interaktive Konfiguration
+# Complete interactive configuration
 # ------------------------------------------------------------
 
 configure_installation() {

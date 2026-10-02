@@ -3,6 +3,7 @@ set -u
 
 # ============================================================
 # LocalDocFlow - Systemstatus
+# LocalDocFlow - System status
 #
 # Prüft die wesentlichen Bestandteile der Installation:
 #
@@ -26,6 +27,7 @@ set -u
 
 # ============================================================
 # Zentrale Systemkonfiguration
+# Central system configuration
 # ============================================================
 
 CONFIG_DIR="$HOME/.config/localdocflow"
@@ -46,6 +48,7 @@ source "$SYSTEM_CONFIG"
 
 # ------------------------------------------------------------
 # Benötigte Werte prüfen
+# Validate required values
 # ------------------------------------------------------------
 
 : "${DOCUMENT_ROOT:?DOCUMENT_ROOT fehlt in system.conf}"
@@ -60,6 +63,7 @@ source "$SYSTEM_CONFIG"
 
 # ------------------------------------------------------------
 # Projektpfade
+# Project paths
 # ------------------------------------------------------------
 
 BASE_DIR="$DOCUMENT_ROOT"
@@ -79,6 +83,7 @@ BIN_DIR="${PROJECT_DIR}/bin"
 
 # ------------------------------------------------------------
 # Dienste
+# Services
 # ------------------------------------------------------------
 
 RAW_SERVICE="localdocflow-watcher.service"
@@ -87,6 +92,7 @@ LEARNING_SERVICE="localdocflow-learning-watcher.service"
 
 # ============================================================
 # Zähler
+# Counters
 # ============================================================
 
 OK_COUNT=0
@@ -96,6 +102,7 @@ FAIL_COUNT=0
 
 # ============================================================
 # Ausgabe-Funktionen
+# Output helper functions
 # ============================================================
 
 ok() {
@@ -130,6 +137,7 @@ section() {
 
 # ============================================================
 # Programm prüfen
+# Check program
 # ============================================================
 
 check_command() {
@@ -151,6 +159,7 @@ check_command() {
 
 # ============================================================
 # Verzeichnis prüfen
+# Check directory
 # ============================================================
 
 check_directory() {
@@ -189,6 +198,7 @@ check_directory() {
 
 # ============================================================
 # JSON-Datei prüfen
+# Check JSON file
 # ============================================================
 
 check_json() {
@@ -218,6 +228,7 @@ check_json() {
 
 # ============================================================
 # Skript prüfen
+# Check script
 # ============================================================
 
 check_script() {
@@ -247,6 +258,7 @@ check_script() {
 
 # ============================================================
 # systemd-Dienst prüfen
+# Check systemd service
 # ============================================================
 
 check_service() {
@@ -293,6 +305,7 @@ check_service() {
 
 # ============================================================
 # Kopf
+# Header
 # ============================================================
 
 echo
@@ -304,6 +317,7 @@ echo
 
 # ============================================================
 # Verzeichnisse
+# Directories
 # ============================================================
 
 section "Verzeichnisse"
@@ -322,6 +336,7 @@ check_directory \
 
 
 # Mountpoint anzeigen
+# Show mount point
 
 if command -v findmnt >/dev/null 2>&1; then
 
@@ -344,6 +359,7 @@ fi
 
 # ============================================================
 # Projektdateien
+# Project files
 # ============================================================
 
 section "Scan-Automation"
@@ -370,6 +386,7 @@ check_script \
 
 
 # Bash-Syntax
+# Bash syntax
 
 for SCRIPT in \
     "${BIN_DIR}/scan_capture.sh" \
@@ -392,6 +409,7 @@ done
 
 
 # Python-Syntax
+# Python syntax
 
 if [[ -f "${BIN_DIR}/scan_gui.py" ]]; then
 
@@ -414,6 +432,7 @@ fi
 
 # ============================================================
 # Konfiguration
+# Configuration
 # ============================================================
 
 section "Konfiguration"
@@ -445,6 +464,7 @@ check_json \
 
 # ============================================================
 # Hintergrunddienste
+# Background services
 # ============================================================
 
 section "Hintergrunddienste"
@@ -460,6 +480,7 @@ check_service \
 
 # ============================================================
 # Programme
+# Programs
 # ============================================================
 
 section "Programme"
@@ -527,6 +548,7 @@ fi
 
 # ============================================================
 # OCR-Sprachen
+# OCR languages
 # ============================================================
 
 section "OCR-Sprachen"
@@ -695,6 +717,7 @@ fi
 
 # ============================================================
 # Lernsystem
+# Learning system
 # ============================================================
 
 section "Lernsystem"
@@ -735,6 +758,7 @@ fi
 
 # ============================================================
 # Zusammenfassung
+# Summary
 # ============================================================
 
 echo

@@ -50,6 +50,7 @@ from PyQt6.QtWidgets import (
 
 # ============================================================
 # Konfiguration
+# Configuration
 # ============================================================
 
 HOME = Path.home()
@@ -84,6 +85,7 @@ PROFILES = [
 
 # ============================================================
 # Hauptfenster
+# Main window
 # ============================================================
 
 class ScanWindow(QMainWindow):
@@ -117,6 +119,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Oberfläche
+    # User interface
     # ========================================================
 
     def build_ui(self):
@@ -148,6 +151,7 @@ class ScanWindow(QMainWindow):
 
         # ----------------------------------------------------
         # Überschrift
+        # Heading
         # ----------------------------------------------------
 
         title = QLabel("Dokument scannen")
@@ -193,6 +197,7 @@ class ScanWindow(QMainWindow):
 
         # ----------------------------------------------------
         # Scanprofil
+        # Scan profile
         # ----------------------------------------------------
 
         profile_title = QLabel("Scanprofil")
@@ -373,6 +378,7 @@ class ScanWindow(QMainWindow):
 
         # ----------------------------------------------------
         # Technische Ausgabe
+        # Technical output
         # ----------------------------------------------------
 
         self.details = QPlainTextEdit()
@@ -393,6 +399,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Einstellungen wiederherstellen
+    # Restore settings
     # ========================================================
 
     def restore_settings(self):
@@ -413,6 +420,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Profilwahl sperren/freigeben
+    # Lock/unlock profile selection
     # ========================================================
 
     def set_profile_controls_enabled(
@@ -426,6 +434,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Scan starten
+    # Start scan
     # ========================================================
 
     def start_scan(self):
@@ -579,6 +588,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Prozessausgabe
+    # Process output
     # ========================================================
 
     def read_process_output(self):
@@ -625,10 +635,12 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Bash-Eingabeaufforderungen erkennen
+    # Detect Bash prompts
     # ========================================================
 
         # ========================================================
     # Signale von scan_capture.sh erkennen
+    # Detect signals from scan_capture.sh
     # ========================================================
 
     def check_for_prompt(self):
@@ -694,6 +706,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Scannerfehler
+    # Scanner error
     # ========================================================
 
     def ask_retry(self):
@@ -743,6 +756,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Weitere Seiten?
+    # Additional pages?
     # ========================================================
 
     def ask_for_more_pages(self):
@@ -788,6 +802,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Weitere Seiten einlegen
+    # Insert additional pages
     # ========================================================
 
     def ask_to_load_more_pages(self):
@@ -819,6 +834,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Scan jederzeit abbrechen
+    # Cancel scan at any time
     # ========================================================
 
     def cancel_scan(
@@ -896,6 +912,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Notfall-Abbruch
+    # Emergency termination
     # ========================================================
 
     def force_kill_if_needed(self):
@@ -934,6 +951,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Scan beendet
+    # Scan finished
     # ========================================================
 
     def scan_finished(
@@ -997,6 +1015,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # QProcess-Fehler
+    # QProcess error
     # ========================================================
 
     def process_error(self, error):
@@ -1010,6 +1029,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Prozess aufräumen
+    # Clean up process
     # ========================================================
 
     def cleanup_process(self):
@@ -1029,6 +1049,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Systemstatus anzeigen
+    # Show system status
     # ========================================================
 
     def show_system_status(self):
@@ -1147,6 +1168,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Ausgabe des Statusskripts lesen
+    # Read status script output
     # ========================================================
 
     def read_system_status_output(self):
@@ -1194,6 +1216,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Systemprüfung abgeschlossen
+    # System check completed
     # ========================================================
 
     def system_status_finished(
@@ -1233,6 +1256,7 @@ class ScanWindow(QMainWindow):
 
         # ========================================================
     # Protokoll anzeigen
+    # Show log
     # ========================================================
 
     def show_logs(self):
@@ -1342,6 +1366,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Protokollausgabe lesen
+    # Read log output
     # ========================================================
 
     def read_log_output(self):
@@ -1386,6 +1411,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Protokoll fertig geladen
+    # Log loading completed
     # ========================================================
 
     def logs_finished(
@@ -1407,6 +1433,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Details ein-/ausblenden
+    # Show/hide details
     # ========================================================
 
     def toggle_details(
@@ -1439,6 +1466,7 @@ class ScanWindow(QMainWindow):
 
     # ========================================================
     # Fenster schließen
+    # Close window
     # ========================================================
 
     def closeEvent(
@@ -1480,6 +1508,7 @@ class ScanWindow(QMainWindow):
 
 # ============================================================
 # Programmstart
+# Program start
 # ============================================================
 
 def main():

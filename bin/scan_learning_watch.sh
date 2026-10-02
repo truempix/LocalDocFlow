@@ -20,11 +20,16 @@ set -euo pipefail
 #
 # Andere fachliche Zielordner innerhalb von LEARNING_ROOT
 # können ebenfalls als Lernziele verwendet werden.
+#
+# English summary:
+#   Documents are recognized by SHA256 hash. A later manual move within
+#   LEARNING_ROOT can be converted into a learned filing rule.
 # ============================================================
 
 
 # ============================================================
 # Grundkonfiguration
+# Basic configuration
 # ============================================================
 
 CONFIG_DIR="$HOME/.config/localdocflow"
@@ -42,6 +47,7 @@ DRY_RUN="${LEARNING_DRY_RUN:-true}"
 
 # ============================================================
 # Programme prüfen
+# Check required programs
 # ============================================================
 
 for CMD in \
@@ -63,6 +69,7 @@ done
 
 # ============================================================
 # Konfiguration prüfen
+# Validate configuration
 # ============================================================
 
 if [[ ! -f "$LEARNING_CONFIG" ]]; then
@@ -79,6 +86,7 @@ fi
 
 # ============================================================
 # Zentrale Systemkonfiguration
+# Central system configuration
 # ============================================================
 
 SYSTEM_CONFIG="$HOME/.config/localdocflow/system.conf"
@@ -98,6 +106,7 @@ source "$SYSTEM_CONFIG"
 
 # ------------------------------------------------------------
 # Benötigte Lernsystem-Pfade prüfen
+# Validate required learning-system paths
 # ------------------------------------------------------------
 
 : "${LEARNING_ROOT:?LEARNING_ROOT fehlt in system.conf}"
@@ -121,6 +130,7 @@ mapfile -t IGNORED_NAMES < <(
 )
 # ============================================================
 # Relative ignorierte Lernpfade auflösen
+# Resolve relative ignored learning paths
 #
 # Der bevorzugte Lernbereich kommt direkt als absoluter Pfad
 # aus CABINET_DIR in system.conf.
@@ -152,6 +162,7 @@ done
 
 # ============================================================
 # Dateien prüfen
+# Validate files
 # ============================================================
 
 if [[ ! -d "$LEARNING_ROOT" ]]; then
@@ -194,6 +205,7 @@ path_is_under() {
 
 # ============================================================
 # Ignorierten Bereich erkennen
+# Detect ignored area
 # ============================================================
 
 is_ignored_path() {
@@ -230,6 +242,7 @@ is_ignored_path() {
 
 # ============================================================
 # Bevorzugten Lernbereich erkennen
+# Detect preferred learning area
 # ============================================================
 
 is_preferred_path() {
@@ -251,6 +264,7 @@ is_preferred_path() {
 
 # ============================================================
 # pending_learning.json atomar aktualisieren
+# Update pending_learning.json atomically
 # ============================================================
 
 update_pending_path() {
@@ -281,6 +295,7 @@ update_pending_path() {
 
 # ============================================================
 # Lernregel erzeugen
+# Create learning rule
 # ============================================================
 
 store_learning_rule() {
@@ -443,6 +458,7 @@ store_learning_rule() {
 
 # ============================================================
 # Eine neu aufgetauchte PDF prüfen
+# Inspect a newly detected PDF
 # ============================================================
 
 handle_pdf() {
@@ -649,6 +665,7 @@ echo
 
 # ============================================================
 # Gesamten Dokumentbaum beobachten
+# Watch the complete document tree
 #
 # moved_to:
 #   normale Verschiebung innerhalb des Dateisystems

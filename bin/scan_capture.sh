@@ -50,6 +50,7 @@ trap handle_abort INT TERM
 
 # ============================================================
 # Zentrale Systemkonfiguration
+# Central system configuration
 # ============================================================
 
 CONFIG_DIR="$HOME/.config/localdocflow"
@@ -72,6 +73,7 @@ source "$SYSTEM_CONFIG"
 
 # ------------------------------------------------------------
 # Benötigte Werte prüfen
+# Validate required values
 #
 # Ein fehlender Wert soll einen verständlichen Fehler erzeugen,
 # statt später irgendwo während des Scannens zu scheitern.
@@ -87,6 +89,7 @@ source "$SYSTEM_CONFIG"
 
 # ------------------------------------------------------------
 # Interne Namen
+# Internal names
 #
 # Die bisherigen Variablennamen bleiben vorerst bestehen.
 # Dadurch müssen wir den restlichen funktionierenden
@@ -111,6 +114,7 @@ trap cleanup EXIT
 
 # ------------------------------------------------------------
 # Manueller Abbruch
+# Manual cancellation
 #
 # Ctrl+C beendet ausschließlich den aktuellen Scanvorgang.
 # Das temporäre Arbeitsverzeichnis wird anschließend durch
@@ -132,6 +136,7 @@ trap handle_abort INT TERM
 
 # ------------------------------------------------------------
 # Programme prüfen
+# Check required programs
 # ------------------------------------------------------------
 
 for CMD in scanimage magick tiffcp tiff2pdf; do
@@ -145,6 +150,7 @@ done
 
 # ------------------------------------------------------------
 # Ziel prüfen
+# Validate destination
 # ------------------------------------------------------------
 
 if [[ ! -d "$RAW_BASE" ]]; then
@@ -155,6 +161,7 @@ fi
 
 # ------------------------------------------------------------
 # Profil bestimmen
+# Determine scan profile
 # ------------------------------------------------------------
 
 if [[ $# -ge 1 ]]; then
@@ -211,6 +218,7 @@ esac
 
 # ------------------------------------------------------------
 # Einzelnen Scan-Durchlauf ausführen
+# Run a single scan pass
 # ------------------------------------------------------------
 
 scan_batch() {
@@ -273,6 +281,7 @@ scan_batch() {
 
 # ------------------------------------------------------------
 # Scan durchführen
+# Perform scan
 # ------------------------------------------------------------
 
 PAGE_COUNTER=1
@@ -300,6 +309,7 @@ else
 
     # --------------------------------------------------------
     # Weitere Seiten einlegen
+    # Insert additional pages
     #
     # Im GUI-Modus wird nur ein eindeutiges Signal ausgegeben.
     # scan_gui.py zeigt anschließend den grafischen Dialog.
@@ -445,6 +455,7 @@ fi
 
 # --------------------------------------------------------
 # Weitere Seiten?
+# Additional pages?
 #
 # Im GUI-Modus wird nur ein eindeutiges Signal ausgegeben.
 # Die eigentliche Frage zeigt scan_gui.py an.
@@ -481,6 +492,7 @@ done
 
 # ------------------------------------------------------------
 # Scan-Seiten erfassen
+# Collect scanned pages
 # ------------------------------------------------------------
 
 shopt -s nullglob
@@ -494,6 +506,7 @@ fi
 
 # ------------------------------------------------------------
 # Zielverzeichnis
+# Destination directory
 # ------------------------------------------------------------
 
 YEAR="$(date +%Y)"
@@ -503,6 +516,7 @@ mkdir -p "$RAW_DIR"
 
 # ------------------------------------------------------------
 # Dateiname
+# Filename
 # ------------------------------------------------------------
 
 SCAN_DATE="$(date +%d.%m.%y)"
@@ -532,6 +546,7 @@ fi
 
 # ------------------------------------------------------------
 # PNM -> TIFF
+# PNM -> TIFF conversion
 # ------------------------------------------------------------
 
 echo
@@ -555,6 +570,7 @@ done
 
 # ------------------------------------------------------------
 # TIFF-Dateien erfassen
+# Collect TIFF files
 # ------------------------------------------------------------
 
 shopt -s nullglob
@@ -568,6 +584,7 @@ fi
 
 # ------------------------------------------------------------
 # Mehrseitiges TIFF
+# Multi-page TIFF
 # ------------------------------------------------------------
 
 MULTIPAGE_TIFF="${WORKDIR}/document.tif"
@@ -581,6 +598,7 @@ tiffcp \
 
 # ------------------------------------------------------------
 # PDF erzeugen
+# Create PDF
 # ------------------------------------------------------------
 
 echo
@@ -594,6 +612,7 @@ tiff2pdf \
 
 # ------------------------------------------------------------
 # Ergebnis prüfen
+# Validate result
 # ------------------------------------------------------------
 
 if [[ ! -s "$OUTPUT" ]]; then
@@ -606,6 +625,7 @@ fi
 
 # ------------------------------------------------------------
 # Ergebnis
+# Result
 # ------------------------------------------------------------
 
 echo

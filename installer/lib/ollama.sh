@@ -4,11 +4,13 @@
 # ============================================================
 # LocalDocFlow - Installer
 # Ollama und lokales KI-Modell
+# Ollama and local AI model
 # ============================================================
 
 
 # ------------------------------------------------------------
 # Ollama-URL aus der Konfiguration ermitteln
+# Determine Ollama URL from configuration
 # ------------------------------------------------------------
 
 get_configured_ollama_url() {
@@ -37,6 +39,7 @@ get_configured_ollama_url() {
 
 # ------------------------------------------------------------
 # Prüfen, ob Ollama installiert ist
+# Check whether Ollama is installed
 # ------------------------------------------------------------
 
 check_ollama_installed() {
@@ -46,6 +49,7 @@ check_ollama_installed() {
 
 # ------------------------------------------------------------
 # Prüfen, ob eine systemd-Unit für Ollama vorhanden ist
+# Check whether an Ollama systemd unit exists
 # ------------------------------------------------------------
 
 ollama_service_exists() {
@@ -62,6 +66,7 @@ ollama_service_exists() {
 
 # ------------------------------------------------------------
 # Prüfen, ob die Ollama-API bereits erreichbar ist
+# Check whether the Ollama API is already reachable
 # ------------------------------------------------------------
 
 ollama_api_reachable() {
@@ -79,6 +84,7 @@ ollama_api_reachable() {
 
 # ------------------------------------------------------------
 # Offiziellen Ollama-Installer ausführen
+# Run the official Ollama installer
 # ------------------------------------------------------------
 
 run_official_ollama_installer() {
@@ -128,6 +134,7 @@ run_official_ollama_installer() {
 
 # ------------------------------------------------------------
 # Ollama installieren
+# Install Ollama
 # ------------------------------------------------------------
 
 install_ollama() {
@@ -164,6 +171,7 @@ install_ollama() {
 
 # ------------------------------------------------------------
 # Ollama-Dienst aktivieren
+# Enable Ollama service
 # ------------------------------------------------------------
 
 activate_ollama_service() {
@@ -204,6 +212,10 @@ activate_ollama_service() {
     #
     # Letzteres kann beispielsweise nach einer abgebrochenen
     # Installation zurückbleiben.
+    #
+    # English note:
+    # A masked, zero-byte, or otherwise broken service file may remain
+    # after an interrupted installation and can be repaired safely.
     # --------------------------------------------------------
 
     if [[ "$enabled_state" == "masked" ]]; then
@@ -441,6 +453,7 @@ activate_ollama_service() {
 
 # ------------------------------------------------------------
 # Auf Ollama-API warten
+# Wait for Ollama API
 # ------------------------------------------------------------
 
 wait_for_ollama() {
@@ -472,6 +485,7 @@ wait_for_ollama() {
 
 # ------------------------------------------------------------
 # Prüfen, ob Modell vorhanden ist
+# Check whether model is available
 # ------------------------------------------------------------
 
 ollama_model_installed() {
@@ -485,6 +499,7 @@ ollama_model_installed() {
 
 # ------------------------------------------------------------
 # KI-Modell installieren
+# Install AI model
 # ------------------------------------------------------------
 
 install_ollama_model() {
@@ -525,6 +540,7 @@ install_ollama_model() {
 
 # ------------------------------------------------------------
 # Arbeitsspeicher für lokales KI-Modell prüfen
+# Check RAM for local AI model
 # ------------------------------------------------------------
 
 check_ollama_memory() {
@@ -577,6 +593,7 @@ check_ollama_memory() {
 
 # ------------------------------------------------------------
 # Vollständige Ollama-Vorbereitung
+# Complete Ollama setup
 # ------------------------------------------------------------
 
 prepare_ollama() {

@@ -3,6 +3,7 @@ set -euo pipefail
 
 # ============================================================
 # LocalDocFlow - Dokumentverarbeitung
+# LocalDocFlow - Document processing
 #
 # Aufgaben:
 #
@@ -30,11 +31,20 @@ set -euo pipefail
 #   Der Inhalt des Originals unter Archiv/Rohscans bleibt
 #   unangetastet. Nach erfolgreicher Analyse darf lediglich
 #   der Dateiname aussagekräftig umbenannt werden.
+#
+# English summary:
+#   OCRs the raw scan, creates PDF/A-2b, derives metadata, uses local AI
+#   and rules for classification, chooses an existing destination, and
+#   stores information for later learning.
+#
+#   Learned corrections take priority over normal mapping.
+#   The AI must never invent or create destination folders.
 # ============================================================
 
 
 # ============================================================
 # Zentrale Systemkonfiguration
+# Central system configuration
 # ============================================================
 
 CONFIG_DIR="$HOME/.config/localdocflow"
@@ -54,6 +64,7 @@ source "$SYSTEM_CONFIG"
 
 # ------------------------------------------------------------
 # Benötigte Systemwerte prüfen
+# Validate required system values
 # ------------------------------------------------------------
 
 : "${DOCUMENT_ROOT:?DOCUMENT_ROOT fehlt in system.conf}"
@@ -66,6 +77,7 @@ source "$SYSTEM_CONFIG"
 
 # ------------------------------------------------------------
 # Interne / fachliche Konfiguration
+# Internal / domain configuration
 # ------------------------------------------------------------
 
 BASE_DIR="$DOCUMENT_ROOT"
@@ -78,6 +90,7 @@ LEARNING_CONFIG="${CONFIG_DIR}/learning_config.json"
 
 # ============================================================
 # Eingabe prüfen
+# Validate input
 # ============================================================
 
 if [[ $# -ne 1 ]]; then
@@ -106,6 +119,7 @@ esac
 
 # ============================================================
 # Benötigte Programme prüfen
+# Validate required programs
 # ============================================================
 
 for CMD in \
@@ -131,6 +145,7 @@ done
 
 # ============================================================
 # Konfigurationsdateien prüfen
+# Validate configuration files
 # ============================================================
 
 for FILE in \
@@ -157,6 +172,7 @@ done
 
 # ============================================================
 # Lernsystem-Pfade
+# Learning-system paths
 #
 # Rechnerabhängige Pfade kommen jetzt aus system.conf.
 # learning_config.json enthält später nur noch fachliche
@@ -186,6 +202,7 @@ fi
 
 # ============================================================
 # OCR-Verzeichnis prüfen
+# Validate OCR directory
 # ============================================================
 
 if [[ ! -d "$OCR_DIR" ]]; then
@@ -197,6 +214,7 @@ fi
 
 # ============================================================
 # Temporären OCR-Dateinamen erzeugen
+# Create temporary OCR filename
 # ============================================================
 
 INPUT_NAME="$(basename "$INPUT")"
@@ -225,6 +243,7 @@ fi
 
 # ============================================================
 # Arbeitsverzeichnis
+# Working directory
 # ============================================================
 
 WORKDIR="$(mktemp -d /tmp/scan-process.XXXXXX)"
@@ -277,6 +296,7 @@ mv "$TEMP_OUTPUT" "$OUTPUT"
 
 # ============================================================
 # OCR-Text extrahieren
+# Extract OCR text
 # ============================================================
 
 pdftotext -layout "$OUTPUT" "$TEXT_FILE"
@@ -284,6 +304,7 @@ pdftotext -layout "$OUTPUT" "$TEXT_FILE"
 
 # ------------------------------------------------------------
 # Komplette erste Seite
+# Complete first page
 # ------------------------------------------------------------
 
 awk '
@@ -294,6 +315,7 @@ awk '
 
 # ------------------------------------------------------------
 # Oberer Dokumentbereich
+# Upper document area
 #
 # Wird als zweiter Suchbereich für Datumsangaben verwendet.
 # ------------------------------------------------------------
@@ -303,6 +325,7 @@ head -n 25 "$FIRST_PAGE_FILE" > "$HEADER_FILE"
 
 # ============================================================
 # Datumsfunktionen
+# Date helper functions
 # ============================================================
 
 month_number() {
@@ -367,6 +390,7 @@ month_number() {
 
 # ============================================================
 # Numerisches Datum validieren
+# Validate numeric date
 #
 # Ausgabe:
 #
@@ -425,6 +449,7 @@ normalize_numeric_date() {
 
 # ============================================================
 # Zeilen mit ungeeigneten Datumsarten ausschließen
+# Exclude lines containing unsuitable date types
 # ============================================================
 
 is_excluded_date_line() {
@@ -483,6 +508,7 @@ is_explicit_date_line() {
 
 # ============================================================
 # Beliebiges Datum aus EINER Zeile extrahieren
+# Extract any date from ONE line
 #
 # Unterstützt:
 #
@@ -592,6 +618,7 @@ extract_date_from_line() {
 
 # ============================================================
 # Monat/Jahr aus einer Zeile extrahieren
+# Extract month/year from a line
 #
 # Unterstützt beispielsweise:
 #
@@ -751,6 +778,7 @@ is_explicit_month_year_line() {
 }
 # ============================================================
 # Dokumentdatum erkennen
+# Detect document date
 #
 # PRIORITÄT:
 #
@@ -922,6 +950,7 @@ detect_document_date() {
 
 # ============================================================
 # Generische Regelerkennung aus JSON
+# Generic rule detection from JSON
 # ============================================================
 
 detect_from_config() {
@@ -978,6 +1007,7 @@ detect_from_config() {
 
 # ============================================================
 # Bekannten Absender erkennen
+# Detect known sender
 # ============================================================
 
 detect_sender() {
@@ -1021,6 +1051,7 @@ detect_sender() {
 
 # ============================================================
 # Bekannten Dokumenttyp erkennen
+# Detect known document type
 # ============================================================
 
 detect_document_type() {
@@ -1034,6 +1065,7 @@ detect_document_type() {
 
 # ============================================================
 # Ollama prüfen
+# Check Ollama
 # ============================================================
 
 ollama_available() {
@@ -1048,6 +1080,7 @@ ollama_available() {
 
 # ============================================================
 # Unbrauchbare KI-Werte erkennen
+# Detect unusable AI values
 # ============================================================
 
 is_bad_ai_value() {
@@ -1098,6 +1131,7 @@ is_bad_ai_value() {
 
 # ============================================================
 # Allgemeine KI-Dokumentanalyse
+# General AI document analysis
 # ============================================================
 
 analyse_with_ai() {
@@ -1257,6 +1291,7 @@ und den oberen Bereich des Dokuments."
 
 # ============================================================
 # KI-Analyse mit Retry
+# AI analysis with retry
 # ============================================================
 
 analyse_with_ai_retry() {
@@ -1308,6 +1343,7 @@ analyse_with_ai_retry() {
 
 # ============================================================
 # Gezielte Titel-Erkennung
+# Targeted title detection
 # ============================================================
 
 detect_title_with_ai() {
@@ -1459,6 +1495,7 @@ EOF
 
 # ============================================================
 # Dateinamensbestandteile bereinigen
+# Sanitize filename components
 # ============================================================
 
 sanitize_filename_part() {
@@ -1476,6 +1513,7 @@ sanitize_filename_part() {
 
 # ============================================================
 # Kollisionsfreien Dateinamen bestimmen
+# Determine collision-free filename
 # ============================================================
 
 unique_destination() {
@@ -1523,6 +1561,7 @@ unique_destination() {
 
 # ============================================================
 # Dokumentdatum bestimmen
+# Determine document date
 #
 # detect_document_date liefert sowohl den Wert als auch die
 # Genauigkeit/Quelle:
@@ -1554,6 +1593,7 @@ fi
 
 # ============================================================
 # Dokumentjahr bestimmen
+# Determine document year
 #
 # Unterstützt:
 #
@@ -1592,6 +1632,7 @@ fi
 
 # ============================================================
 # Regelbasierte Voranalyse
+# Rule-based pre-analysis
 # ============================================================
 
 if SENDER="$(
@@ -1634,6 +1675,7 @@ AI_USED=false
 
 # ============================================================
 # Allgemeine KI-Analyse
+# General AI analysis
 # ============================================================
 
 echo
@@ -1689,6 +1731,8 @@ if ollama_available; then
 
         # Nur eine im OCR-Text tatsächlich vorkommende Nummer übernehmen.
         # Trennzeichen dürfen variieren; Ziffern und Buchstaben müssen gleich sein.
+        # Only accept a number that actually appears in the OCR text.
+        # Separators may differ, but letters and digits must match.
         if [[ -n "$AI_INSURANCE_NUMBER" ]]; then
             NUMBER_NORMALIZED="$(printf '%s' "$AI_INSURANCE_NUMBER" | tr -cd '[:alnum:]' | tr '[:lower:]' '[:upper:]')"
             TEXT_NORMALIZED="$(tr -cd '[:alnum:]' < "$TEXT_FILE" | tr '[:lower:]' '[:upper:]')"
@@ -1798,6 +1842,7 @@ fi
 
 # ============================================================
 # Titel absichern
+# Validate title
 # ============================================================
 
 if [[ -z "$TITLE" ]]; then
@@ -1832,6 +1877,7 @@ fi
 
 # ============================================================
 # Titel-Fallback auf Dokumenttyp
+# Fallback from title to document type
 # ============================================================
 
 if [[ -z "$TITLE" ]]; then
@@ -1850,12 +1896,15 @@ fi
 
 # ============================================================
 # Sinnvollen Dateinamen erzeugen
+# Create meaningful filename
 # ============================================================
 
 PROPOSED_FILENAME=""
 
 # Versicherungsnummer nur dann in den Dateinamen aufnehmen,
 # wenn sie zuvor sicher im Dokument erkannt wurde.
+# Include an insurance number in the filename only after it has
+# been safely verified against the document content.
 INSURANCE_FILENAME_PART=""
 
 if [[ -n "$INSURANCE_NUMBER" ]]; then
@@ -1908,6 +1957,7 @@ fi
 
 # ============================================================
 # Gelernte Ablageregeln
+# Learned filing rules
 #
 # Punkte:
 #
@@ -1928,6 +1978,7 @@ LEARNING_MIN_SCORE=8
 
 # ============================================================
 # Text normalisieren
+# Normalize text
 # ============================================================
 
 normalize_match_text() {
@@ -1952,6 +2003,7 @@ normalize_match_text() {
 
 # ============================================================
 # Lernwert validieren
+# Validate learning value
 # ============================================================
 
 learning_value_valid() {
@@ -1978,6 +2030,7 @@ learning_value_valid() {
 
 # ============================================================
 # Exakten Lernwert vergleichen
+# Compare exact learning value
 # ============================================================
 
 learning_exact_match() {
@@ -2013,6 +2066,7 @@ normalize_insurance_number() {
 
 # ============================================================
 # Titelähnlichkeit
+# Title similarity
 # ============================================================
 
 title_match_score() {
@@ -2093,6 +2147,7 @@ title_match_score() {
 
 # ============================================================
 # Bestes gelerntes Ziel bestimmen
+# Determine best learned target
 # ============================================================
 
 detect_learned_target() {
@@ -2168,6 +2223,8 @@ detect_learned_target() {
 
         # Bei Versicherungen ist ein allgemeiner Treffer keine sichere
         # Vertragszuordnung. Auch ältere Regeln ohne Nummer bleiben inaktiv.
+        # For insurance documents, a generic match is not sufficient
+        # for a contract assignment. Older rules without a number stay inactive.
         if [[ "${CATEGORY,,}" == versicherung || "${RULE_CATEGORY,,}" == versicherung ]]; then
             CURRENT_NUMBER="$(normalize_insurance_number "$INSURANCE_NUMBER")"
             RULE_NUMBER="$(normalize_insurance_number "$RULE_INSURANCE_NUMBER")"
@@ -2346,6 +2403,7 @@ detect_learned_target() {
 
 # ============================================================
 # Normales Mapping
+# Standard mapping
 # ============================================================
 
 detect_target_folder() {
@@ -2539,6 +2597,7 @@ detect_target_folder() {
 
 # ============================================================
 # Ziel bestimmen
+# Determine target
 #
 # Reihenfolge:
 #
@@ -2639,6 +2698,7 @@ fi
 
 # ============================================================
 # Automatische Ablage
+# Automatic filing
 # ============================================================
 
 AUTO_FILE=false
@@ -2672,6 +2732,7 @@ fi
 
 # ============================================================
 # Gegebenenfalls verschieben
+# Move if necessary
 # ============================================================
 
 FINAL_FILE="$CURRENT_FILE"
@@ -2709,6 +2770,7 @@ fi
 
 # ============================================================
 # Rohscan aussagekräftig umbenennen
+# Rename raw scan meaningfully
 #
 # Der Inhalt der ursprünglichen PDF wird NICHT verändert.
 # Es wird ausschließlich der Dateiname angepasst.
@@ -2785,6 +2847,7 @@ if [[ -n "$PROPOSED_FILENAME" ]]; then
 fi
 # ============================================================
 # Fingerprints für späteres Lernen
+# Fingerprints for later learning
 # ============================================================
 
 SOURCE_HASH="$(
@@ -2801,6 +2864,7 @@ FILE_HASH="$(
 
 # ============================================================
 # Lern-Datensatz speichern
+# Store learning record
 # ============================================================
 
 PROCESSED_AT="$(
@@ -2861,6 +2925,7 @@ mv \
 
 # ============================================================
 # PDF-Informationen
+# PDF information
 # ============================================================
 
 PAGES="$(
@@ -2891,6 +2956,7 @@ TEXT_CHARS="$(
 
 # ============================================================
 # Ergebnis
+# Result
 # ============================================================
 
 echo
