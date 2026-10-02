@@ -1,19 +1,19 @@
-## Beschreibung
+## Description / Beschreibung
 
-Was ändert dieser Pull Request?
+What does this pull request change? / Was ändert dieser Pull Request?
 
 ## Motivation
 
-Warum ist die Änderung sinnvoll?
+Why is this change useful? / Warum ist die Änderung sinnvoll?
 
 ## Tests
 
-- [ ] Bash-Syntax geprüft
-- [ ] Python-Syntax geprüft
-- [ ] JSON-Dateien geprüft
-- [ ] Privacy-Check durchgeführt
-- [ ] Installation/Workflow getestet, soweit relevant
+- [ ] Bash syntax checked / Bash-Syntax geprüft
+- [ ] Python syntax checked / Python-Syntax geprüft
+- [ ] JSON files checked / JSON-Dateien geprüft
+- [ ] Privacy check completed / Privacy-Check durchgeführt
+- [ ] Installation/workflow tested where relevant / Installation/Workflow getestet, soweit relevant
 
-## Datenschutz
+## Privacy / Datenschutz
 
-- [ ] Keine persönlichen Dokumente oder privaten Konfigurationsdaten enthalten
+- [ ] No personal documents or private production configuration are included / Keine persönlichen Dokumente oder privaten Konfigurationsdaten enthalten

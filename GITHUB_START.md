@@ -1,5 +1,7 @@
 # GitHub-Schnellstart für LocalDocFlow
 
+**Sprache:** Deutsch | [English](GITHUB_START.en.md)
+
 Diese Datei richtet sich an den Projektbetreuer und erklärt die wichtigsten Begriffe und den ersten Upload.
 
 ## Grundbegriffe

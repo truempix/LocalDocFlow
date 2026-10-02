@@ -1,0 +1,41 @@
+name: Bug report (English)
+description: Report a reproducible problem in LocalDocFlow
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Remove personal data, document contents, credentials, and unnecessary serial numbers from logs and screenshots before posting.
+  - type: input
+    id: version
+    attributes:
+      label: LocalDocFlow version
+      placeholder: "0.1.3"
+    validations:
+      required: true
+  - type: input
+    id: distro
+    attributes:
+      label: Linux distribution and version
+      placeholder: "Ubuntu 26.04"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem description
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Remove personal information first.
+      render: shell

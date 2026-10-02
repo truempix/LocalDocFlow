@@ -1,5 +1,7 @@
 # Installation von LocalDocFlow
 
+**Sprache:** Deutsch | [English](INSTALL.en.md)
+
 Diese Anleitung beschreibt die Installation des aktuellen Entwicklungsstands.
 
 ## Voraussetzungen

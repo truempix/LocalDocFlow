@@ -1,5 +1,7 @@
 # LocalDocFlow
 
+**Sprache:** Deutsch | [English](README.en.md)
+
 LocalDocFlow ist eine lokale Linux-Anwendung zur automatisierten Digitalisierung, Texterkennung, Analyse und Ablage von Papierdokumenten.
 
 Das Projekt verbindet einen SANE-kompatiblen Dokumentenscanner mit OCRmyPDF, Tesseract und einer lokal betriebenen KI über Ollama. Ziel ist ein möglichst einfacher Ablauf:

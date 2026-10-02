@@ -1,8 +1,8 @@
-# Release-Checkliste
+# Release checklist
 
-**Sprache:** Deutsch | [English](RELEASE.en.md)
+**Language:** [Deutsch](RELEASE.md) | English
 
-## 1. Syntax prüfen
+## 1. Syntax checks
 
 ```bash
 cd ~/LocalDocFlow || exit 1
@@ -20,7 +20,7 @@ done
 find . -type d -name '__pycache__' -prune -exec rm -rf {} +
 ```
 
-## 2. Privacy-Check
+## 2. Privacy check
 
 ```bash
 grep -RInI \
@@ -36,18 +36,24 @@ grep -RInI \
   .
 ```
 
-Treffer müssen einzeln bewertet werden.
-Zusätzlich sollte vor einer Veröffentlichung gezielt nach eigenen Namen,
-Domains, Rechnernamen, Scanner-Seriennummern und anderen persönlichen
-Kennungen gesucht werden.
+Every match must be reviewed individually.
 
-## 3. Unerwünschte Dateien prüfen
+Before publication, also search specifically for personal names, domains, host names, scanner serial numbers, and other private identifiers.
+
+## 3. Check for unwanted files
 
 ```bash
-find .   \( -name '*.bak*'      -o -name '*.swp'      -o -name '*~'      -o -name '*.pyc'      -o -name '__pycache__'      -o -name '*.log' \)   -print
+find . \
+  \( -name '*.bak*' \
+     -o -name '*.swp' \
+     -o -name '*~' \
+     -o -name '*.pyc' \
+     -o -name '__pycache__' \
+     -o -name '*.log' \) \
+  -print
 ```
 
-## 4. Build-Verzeichnis erzeugen
+## 4. Create the build directory
 
 ```bash
 rm -rf ~/localdocflow-build
@@ -75,25 +81,29 @@ cp \
   ~/localdocflow-build/LocalDocFlow-0.1.3/
 ```
 
-## 5. Build bereinigen und Archiv erzeugen
+## 5. Clean the build and create the archive
 
 ```bash
-find ~/localdocflow-build/LocalDocFlow-0.1.3   -type f -name '*.bak*' -delete
+find ~/localdocflow-build/LocalDocFlow-0.1.3 \
+  -type f -name '*.bak*' -delete
 
-find ~/localdocflow-build/LocalDocFlow-0.1.3   -type d -name '__pycache__' -prune -exec rm -rf {} +
+find ~/localdocflow-build/LocalDocFlow-0.1.3 \
+  -type d -name '__pycache__' -prune -exec rm -rf {} +
 
 chmod +x ~/localdocflow-build/LocalDocFlow-0.1.3/installer/install.sh
 
-tar -C ~/localdocflow-build   -czf ~/LocalDocFlow-0.1.3.tar.gz   LocalDocFlow-0.1.3
+tar -C ~/localdocflow-build \
+  -czf ~/LocalDocFlow-0.1.3.tar.gz \
+  LocalDocFlow-0.1.3
 ```
 
-## 6. Archiv kontrollieren
+## 6. Inspect the archive
 
 ```bash
 ls -lh ~/LocalDocFlow-0.1.3.tar.gz
 tar -tzf ~/LocalDocFlow-0.1.3.tar.gz | head -100
 ```
 
-## 7. Frische VM testen
+## 7. Test in a fresh VM
 
-Vor Veröffentlichung sollte das fertige Archiv nochmals in einer frischen VM installiert werden.
+Before publication, install the final archive once more in a fresh VM.

@@ -19,6 +19,7 @@ Alle wichtigen Änderungen an LocalDocFlow werden in dieser Datei dokumentiert.
 - endgültige Dokumentenablage über `CABINET_DIR` frei konfigurierbar.
 - ausdrücklich im Dokument enthaltene Versicherungsnummern können erkannt und nach Prüfung gegen den Dokumenttext in den Dateinamen übernommen werden.
 - Versicherungsnummern werden im Lernsystem gespeichert und bei Versicherungsdokumenten als zusätzliches Vertragsmerkmal für gelernte Ablageregeln verwendet.
+- englische Fassungen der zentralen Projekt- und Release-Dokumentation ergänzt.
 
 ### Behoben
 

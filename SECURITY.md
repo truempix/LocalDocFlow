@@ -1,5 +1,7 @@
 # Sicherheit
 
+**Sprache:** Deutsch | [English](SECURITY.en.md)
+
 Bitte keine Zugangsdaten, privaten Schlüssel oder persönlichen Dokumente in öffentlichen Issues veröffentlichen.
 
 Falls für das Repository GitHub Private Vulnerability Reporting aktiviert wird, sollte diese Funktion für sicherheitsrelevante Meldungen verwendet werden.

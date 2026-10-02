@@ -1,5 +1,7 @@
 # Externe Komponenten
 
+**Sprache:** Deutsch | [English](THIRD_PARTY.en.md)
+
 LocalDocFlow nutzt bzw. installiert externe Open-Source-Komponenten. Diese bleiben unter ihren jeweiligen eigenen Lizenzen.
 
 Wichtige Komponenten sind unter anderem:

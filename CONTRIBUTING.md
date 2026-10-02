@@ -1,5 +1,7 @@
 # Mitwirken
 
+**Sprache:** Deutsch | [English](CONTRIBUTING.en.md)
+
 Beiträge zu LocalDocFlow sind willkommen.
 
 ## Fehler melden
